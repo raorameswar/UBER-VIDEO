@@ -96,3 +96,101 @@ The endpoint expects a JSON object with the following fields:
 
 ---
 
+# User Registration and Login Endpoint Documentation
+
+## Endpoint: `/users/register`
+
+### **Description:**
+This endpoint allows users to register by providing their full name, email, and password. The provided password will be securely hashed before saving in the database.
+
+---
+
+### **Method:** `POST`
+
+### **Request Body:**
+The request body should be in JSON format:
+
+```json
+{
+  "fullname": {
+    "firstname": "Ramesh",
+    "lastname": "Verma"
+  },
+  "email": "ramesh@gmail.com",
+  "password": "password123"
+}
+```
+
+**Required Fields:**
+- `fullname.firstname` (String, min 3 characters) – **Required**
+- `fullname.lastname` (String, min 3 characters) – Optional
+- `email` (String, min 5 characters) – **Required**, must be unique
+- `password` (String) – **Required**
+
+---
+
+### **Response Codes:**
+
+- **201 Created:**
+  ```json
+  {
+    "message": "User registered successfully",
+    "user": {
+      "_id": "unique_user_id",
+      "email": "ramesh@gmail.com"
+    }
+  }
+  ```
+
+- **400 Bad Request:** Missing required fields or validation errors.
+- **409 Conflict:** Email already exists.
+- **500 Internal Server Error:** Server-side issue during registration.
+
+---
+
+## Endpoint: `/users/login`
+
+### **Description:**
+This endpoint allows users to log in by providing their email and password. On successful authentication, a JWT token is generated and returned.
+
+---
+
+### **Method:** `POST`
+
+### **Request Body:**
+```json
+{
+  "email": "ramesh@gmail.com",
+  "password": "password123"
+}
+```
+
+**Required Fields:**
+- `email` (String) – **Required**
+- `password` (String) – **Required**
+
+---
+
+### **Response Codes:**
+
+- **200 OK:**
+  ```json
+  {
+    "message": "Login successful",
+    "token": "jwt_token_here"
+  }
+  ```
+
+- **400 Bad Request:** Missing required fields or invalid credentials.
+- **401 Unauthorized:** Incorrect email or password.
+- **500 Internal Server Error:** Server-side issue during login.
+
+---
+
+### **Dependencies:**
+- `express`
+- `mongoose`
+- `bcrypt`
+- `jsonwebtoken`
+- `express-validator`
+
